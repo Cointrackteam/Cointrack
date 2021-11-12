@@ -1,2 +1,2 @@
-# hello world
-hello world this is our new project
+
+# CONSENSYS HACKATHON - Building a Dapp
