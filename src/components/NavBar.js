@@ -2,7 +2,8 @@ import React from 'react';
 import logo from '../static/images/logo.svg';
 
 
-export const NavBar = () => {
+export const NavBar = (props) => {
+    // will display account balance after connect
     return (
         <div className="navbar navbar-expand-lg fixed-top navbar-light" >
              <div className="container">
@@ -18,7 +19,6 @@ export const NavBar = () => {
                         <a className="btn-solid-sm page-scroll " href="#header">connect with metmask</a>
                     </span>
                 </div> {/* -- end of container --> */}
-            
             </div> {/* -- end of navbar --> */}
         </div>
     )

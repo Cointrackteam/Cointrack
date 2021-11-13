@@ -6,7 +6,6 @@ import HeaderBulbTable from "../static/images/header-bulb-table.png";
 const Hero = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const onSubmit = data => console.log(data);
-    // console.log(errors);
 
     return (
         <div id="header" className="header">
