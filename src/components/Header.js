@@ -7,7 +7,6 @@ import BalancesCard from './BalancesCard';
 const Header = () => {
   return (
     <NavBar>
-      <BalancesCard />
       <MetamaskConnectButton />
     </NavBar>
   );
