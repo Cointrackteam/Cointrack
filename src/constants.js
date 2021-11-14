@@ -1,11 +1,11 @@
 // MY INFURA_ID, SWAP IN YOURS FROM https://infura.io/dashboard/ethereum
-export const INFURA_ID = process.env.INFURA_ID;
+export const INFURA_ID = process.env.RAZZLE_INFURA_ID;
 
 // MY ETHERSCAN_ID, SWAP IN YOURS FROM https://etherscan.io/myapikey
-export const ETHERSCAN_KEY = process.env.ETHERSCAN_KEY;
+export const ETHERSCAN_KEY = process.env.RAZZLE_ETHERSCAN_KEY;
 
 // BLOCKNATIVE ID FOR Notify.js:
-export const BLOCKNATIVE_DAPPID = process.env.BLOCKNATIVE_DAPPID;
+export const BLOCKNATIVE_DAPPID = process.env.RAZZLE_BLOCKNATIVE_DAPPID;
 
 export const NETWORKS = {
   localhost: {

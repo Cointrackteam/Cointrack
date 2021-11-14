@@ -1,14 +1,14 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import WalletLink from "walletlink";
-import {Alert, Button, Card, Col, Input, ListGroup, ListGroupItem, Nav, Row } from 'react-bootstrap';
+import { Alert, Button, Card, Col, Input, ListGroup, ListGroupItem, Navbar, Nav, Row } from 'react-bootstrap';
 import ReactJson from 'react-json-view';
 import { ethers } from 'ethers';
 import {Account, Address, AddressInput, GasGauge, ThemeSwitch, Ramp } from './components/wallet';
 import {NETWORK, NETWORKS, INFURA_ID, ETHERSCAN_KEY, BLOCKNATIVE_DAPPID} from "./constants";
 import { Transactor } from './helpers';
+import { BrowserRouter, Link, Route, Switch } from 'react-router-dom'; // the main header of the website has to be integrated via react router
 import Web3Modal from "web3modal";
-import { Route } from 'react-router-dom'; // the main header of the website has to be integrated via react router
 
 import Portis from "@portis/web3";
 import Fortmatic from "fortmatic";
@@ -16,7 +16,7 @@ import Authereum from "authereum";
 
 import './styles/App.css';
 import Home from './pages/Home';
-import NavBar from './components/NavBar';
+// import NavBar from './components/NavBar';
 import { AppContextProvider } from './AppContext';
 
 // web-react 
@@ -31,9 +31,8 @@ import {
 } from "eth-hooks/events/useEventListener";
 
 // import {
-//   useExchangeEthPrice,
-// } from "eth-hooks/dapps/dex";
-
+//   useDexEthPrice,
+// } from "eth-hooks/dapps";
 // network you want the user to connected to
 const targetNetwork = process.targetNetwork === "test" ? NETWORKS.rinkeby : NETWORKS.mainnet;
 
@@ -152,17 +151,20 @@ const App = (props) => {
   }, [loadWeb3Modal]);
 
   /* 💵 gets ETH price from 🦄 Uniswap: */
-  const price = useExchangeEthPrice(targetNetwork, mainnetProvider);
+  // const price = useDexEthPrice(mainnetProvider, targetNetwork);
 
   /* 🔥 gets Gas from ⛽️ EtherGasStation */
-  const gasPrice = useGasPrice(targetNetwork, "fast");
+  // const gasPrice = useGasPrice(targetNetwork, "fast");
   // information needed for account in context
   // use the information provided to context to display in account which is set in navBar
+
   return (
 
     <AppContextProvider>
       <BrowserRouter >
-          <NavBar />
+          <Navbar bg='light' expand='lg' fixed='top' >
+            <Navbar.Brand href="/">Logo</Navbar.Brand>
+          </Navbar>
           <Route exact path="/" component={Home} />
       </BrowserRouter>
     </AppContextProvider>
