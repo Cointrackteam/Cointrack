@@ -7,6 +7,12 @@ export const ETHERSCAN_KEY = process.env.RAZZLE_ETHERSCAN_KEY;
 // BLOCKNATIVE ID FOR Notify.js:
 export const BLOCKNATIVE_DAPPID = process.env.RAZZLE_BLOCKNATIVE_DAPPID;
 
+// BLOCKNATIVE ID FOR Notify.js:
+export const FORTMATIC_API_KEY = process.env.RAZZLE_FORTMATIC_API_KEY;
+
+// BLOCKNATIVE ID FOR Notify.js:
+export const PORTIS_ID = process.env.RAZZLE_PORTIS_ID;
+
 export const NETWORKS = {
   localhost: {
     name: "localhost",
@@ -192,3 +198,13 @@ export const NETWORK = chainId => {
     }
   }
 };
+
+export const CHAINIDS = () => {
+  const ids = Array();
+  for (const n in NETWORKS){
+    ids.push(NETWORKS[n].chainId);
+  }
+  return ids;
+}
+
+
