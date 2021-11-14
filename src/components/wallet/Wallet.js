@@ -68,7 +68,6 @@ const Wallet = () => {
                     <Badge varient='light'>{userAddress}</Badge>
                 </Button>
             )  
-
     return (
         <> 
             {buttons}               
