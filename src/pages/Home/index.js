@@ -6,7 +6,11 @@ import Hero from '../../components/Hero';
 const Home = () => {
   
   return (
-    <Hero />
+    <div id='header' className="header">
+      <Container>
+        <Hero />
+      </Container> 
+    </div>
   );
 };
 
