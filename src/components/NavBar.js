@@ -1,7 +1,6 @@
 import React from 'react';
 import logo from '../static/images/logo.svg';
 
-
 export const NavBar = (props) => {
     // will display account balance after connect
     return (
@@ -16,7 +15,8 @@ export const NavBar = (props) => {
 
                 <div className="navbar-collapse offcanvas-collapse d-flex justify-content-end" id="navbarsExampleDefault">
                     <span className="nav-item">
-                        <a className="btn-solid-sm page-scroll " href="#header">connect with metmask</a>
+                        <a className="btn-solid-sm page-scroll " href="#header">connect with metmask</a> 
+                        {/* connecting with metamask happens here */}
                     </span>
                 </div> {/* -- end of container --> */}
             </div> {/* -- end of navbar --> */}
