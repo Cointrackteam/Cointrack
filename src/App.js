@@ -1,23 +1,22 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import WalletLink from "walletlink";
-import { Alert, Button, Card, Col, Input, ListGroup, ListGroupItem, Navbar, Nav, Row } from 'react-bootstrap';
+import { Alert, Button, Card, Col, Input, ListGroup, ListGroupItem, Navbar, Nav, Row, Container } from 'react-bootstrap';
 import ReactJson from 'react-json-view';
 import { ethers } from 'ethers';
 import {Account, Address, AddressInput, GasGauge, ThemeSwitch, Ramp } from './components/wallet';
 import {NETWORK, NETWORKS, INFURA_ID, ETHERSCAN_KEY, BLOCKNATIVE_DAPPID} from "./constants";
 import { Transactor } from './helpers';
-import { BrowserRouter, Link, Route, Switch } from 'react-router-dom'; // the main header of the website has to be integrated via react router
+import { Route } from 'react-router-dom'; // the main header of the website has to be integrated via react router
 import Web3Modal from "web3modal";
-
 import Portis from "@portis/web3";
 import Fortmatic from "fortmatic";
 import Authereum from "authereum";
-
 import './styles/App.css';
 import Home from './pages/Home';
 // import NavBar from './components/NavBar';
 import { AppContextProvider } from './AppContext';
+import logo from './static/images/logo.svg';
 
 // web-react 
 import { 
@@ -161,12 +160,22 @@ const App = (props) => {
   return (
 
     <AppContextProvider>
-      <BrowserRouter >
-          <Navbar bg='light' expand='lg' fixed='top' >
-            <Navbar.Brand href="/">Logo</Navbar.Brand>
-          </Navbar>
-          <Route exact path="/" component={Home} />
-      </BrowserRouter>
+        <Navbar expand='lg' fixed='top' >
+          <Container>
+            <Navbar.Brand className="logo-image" href="/">
+              <img
+              src={logo}
+              alt="Cointrack"/>
+            </Navbar.Brand>
+            
+            <Nav.Item as='span'>
+              <Nav.Link bsPrefix='costum' className="btn-solid-sm page-scroll">
+                Connect
+              </Nav.Link>
+            </Nav.Item>
+          </Container>
+        </Navbar>
+        <Route exact path="/" component={Home}/>
     </AppContextProvider>
   );
 };
