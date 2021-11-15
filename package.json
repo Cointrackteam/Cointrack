@@ -26,6 +26,7 @@
     "react-dom": "^17.0.1",
     "react-hook-form": "^7.19.5",
     "react-json-view": "^1.21.3",
+    "react-player": "^2.9.0",
     "react-router-dom": "^5.1.2",
     "styled-components": "^5.2.3",
     "walletlink": "^2.2.6",

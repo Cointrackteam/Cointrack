@@ -1,14 +1,17 @@
 import React from 'react'; 
 import {useForm} from "react-hook-form";
+import Video from '../static/videos/placeholder.mp4';
+import ReactPlayer from 'react-player';
 import HeaderBulbTable from "../static/images/header-bulb-table.png";
-import { Row, Col, Container, Card } from 'react-bootstrap'; 
+import { Row, Col, Container, Card, Jumbotron } from 'react-bootstrap'; 
 
 const Hero = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const onSubmit = data => console.log(data);
 
     return (
-        <>
+        <>  
+
             <Row>
                 <Col lg={6} xl={5}>
                     <Container as='div' className="text-container">
@@ -31,9 +34,29 @@ const Hero = () => {
                         <img className='image-fluid' src={HeaderBulbTable} alt="alternative"></img>
                     </Container> {/* <!-- end of image-container --> */}
                 </Col>{/* <!-- end of col --> */}
+            </Row >
+            <Row >
+                <Container className="mt-5">
+                    <h1>Video Title</h1>
+                    <p className="p-large">video goes here explainning how this works</p>
+                </Container>
+                <Col lg='6' xl='7' gap="5">
+                    <ReactPlayer 
+                    url={Video}
+                    width="600" 
+                    height="300" 
+                    controls={true}
+                    muted={true} 
+                    playing={true}/>
+                </Col>
             </Row>
             <Row>
-                <Col lg='12'>
+                <Container className="mt-5">
+                    <h1>We support the following chains <br/> <small> (More coming soon) </small> </h1>
+                </Container>
+            </Row>
+            <Row >
+                <Col lg='12' className="pt-5">
                     <Card className='first'> {/* <!-- Card --> */}
                         <div className='card-icon'>
                             <span className="fas fa-rocket green"></span>
@@ -73,9 +96,10 @@ const Hero = () => {
                             </Card.Text>
                         </Card.Body>{/* <!-- end of card --> */}
                     </Card>
-                    
                 </Col>
             </Row>
+            
+            
         </> 
     )
 }
