@@ -1,7 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { Button, Badge } from 'react-bootstrap';
 import { getProvider, web3Modal } from  './providers'; 
-import { useUserAddress } from 'eth-hooks';
 import { shortenAddress } from '../../utils/shortenAddress';
 
 const ethers = require('ethers');
