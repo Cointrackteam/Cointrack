@@ -81,15 +81,3 @@ const Hero = () => {
 }
 
 export default Hero;
-{/* <div class="jumbotron jumbotron-fluid">
-                                 <div class="container">
-                                 <h1 class="display-4">video location</h1>
-                                          <p class="lead">video goes here explainning how this works</p>
-                    </div>
-                                    </div>
-
-                    <div class="page-header">
-                            <h1>We support the following blockchains <br/>   <small> (More coming soon) </small> </h1>
-                                                </div>
-
-                </div> */}
