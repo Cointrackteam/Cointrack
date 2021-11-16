@@ -2,6 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { Button, Badge } from 'react-bootstrap';
 import { getProvider, web3Modal } from  './providers'; 
 import { shortenAddress } from '../../utils/shortenAddress';
+import { useAppContext } from '../../AppContext';
 
 const ethers = require('ethers');
 
@@ -10,6 +11,7 @@ const Wallet = () => {
     
     const [injectedProvider, setInjectedProvider] = useState();
     const [userAddress, setUserAddress] = useState(); 
+    const cexAddressMap = useAppContext().cexAddressMap;
 
     useEffect( () => {
         if (injectedProvider){
@@ -28,7 +30,6 @@ const Wallet = () => {
     const loadWeb3Modal = useCallback(async () => {
         const provider = await getProvider(); // creates a provider from web3modal 
         setInjectedProvider(new ethers.providers.Web3Provider(provider));
-        console.log(provider.on);
 
         provider.on("chainChanged", chainId => {
           console.log(`chain changed to ${chainId}! updating providers`);
