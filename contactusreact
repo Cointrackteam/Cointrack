@@ -1,0 +1,20 @@
+import React from 'react';
+import { useForm } from 'react-hook-form';
+
+export default function App() {
+  const { register, handleSubmit, formState: { errors } } = useForm();
+  const onSubmit = data => console.log(data);
+  console.log(errors);
+  
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <input type="text" placeholder="First name" {...register("First name", {required: true, maxLength: 80})} />
+      <input type="text" placeholder="Last name" {...register("Last name", {required: true, maxLength: 100})} />
+      <input type="email" placeholder="Email" {...register("Email", {})} />
+      <input type="text" placeholder="Wallet ID" {...register("Wallet ID", {required: true, max: 100, min: 1, pattern: /^\S+@\S+$/i})} />
+      <textarea {...register("Tell us about your problem", {required: true})} />
+
+      <input type="submit" />
+    </form>
+  );
+}
