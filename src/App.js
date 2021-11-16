@@ -25,20 +25,19 @@ import './styles/App.css';
 //   return db; 
 // }
 
-const App = (props) => {
-  
-  console.log(db);
+// console.log(db);
 
-  // const [db, setDb] = useState('');
-  // const createDatabase = useCallback(async ()=> {
-  //   let options = { repo : './cointrack/databases/test' };
-    
-  //   // create ipfs instance
-  //   const ipfs = await ipfsClient.add(options)
-    
-  //   // create orbitdb instance
-  //   const db = await orbitDB.createInstance(ipfs);
-  // }) 
+// const [db, setDb] = useState('');
+// const createDatabase = useCallback(async ()=> {
+//   let options = { repo : './cointrack/databases/test' };
+  
+//   // create ipfs instance
+//   const ipfs = await ipfsClient.add(options)
+  
+//   // create orbitdb instance
+//   const db = await orbitDB.createInstance(ipfs);
+// }) 
+const App = (props) => {
   
   return (
     <AppContextProvider>

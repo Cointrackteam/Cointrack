@@ -1,49 +1,33 @@
 import React, { createContext, useReducer } from 'react';
+import {csv} from 'd3-request';
+import csxData from './static/db-data/csx-address-data.csv';
+
+const db = new Map();
+
+csv(csxData, (e, d) => {
+  if(e)console.log(e);
+  void d.map(dataPoint => db.set(dataPoint.exchangeAddress, dataPoint.exchangeName));
+})
 
 const initialContext = {
-  ethBalance: '--',
-  setEthBalance: () => {},
-  cTokenBalance: '--',
-  setCTokenBalance: () => {},
-  exchangeRate: 0,
-  setExchangeRate: () => {},
-  isWalletConnectionModalOpen: false,
-  setWalletConnectModal: () => {},
-  txnStatus: 'NOT_SUBMITTED',
-  setTxnStatus: () => {},
+  cexAddressMap: db,
+  setCEXAddress: () => {}
+  // getAddressName: () => {}, 
+  // ethBalance: '--',
+
 };
 
 const appReducer = (state, { type, payload }) => {
   switch (type) {
-    case 'SET_ETH_BALANCE':
-      return {
-        ...state,
-        ethBalance: payload,
-      };
+    case 'SET_CEX_ADDRESS':
+      return new Map([...state]).set(payload.key, payload.value);
+    // case 'SET_ETH_BALANCE':
+    //   return {
+    //     ...state,
+    //     ethBalance: payload,
+    //   };
 
-    case 'SET_C_TOKEN_BALANCE':
-      return {
-        ...state,
-        cTokenBalance: payload,
-      };
 
-    case 'SET_EXCHANGE_RATE':
-      return {
-        ...state,
-        exchangeRate: payload,
-      };
-
-    case 'SET_WALLET_MODAL':
-      return {
-        ...state,
-        isWalletConnectModalOpen: payload,
-      };
-
-    case 'SET_TXN_STATUS':
-      return {
-        ...state,
-        txnStatus: payload,
-      };
     default:
       return state;
   }
@@ -51,30 +35,23 @@ const appReducer = (state, { type, payload }) => {
 
 const AppContext = createContext(initialContext);
 export const useAppContext = () => React.useContext(AppContext);
+
 export const AppContextProvider = ({ children }) => {
   const [store, dispatch] = useReducer(appReducer, initialContext);
 
   const contextValue = {
-    ethBalance: store.ethBalance,
-    setEthBalance: (balance) => {
-      dispatch({ type: 'SET_ETH_BALANCE', payload: balance });
-    },
-    cTokenBalance: store.cTokenBalance,
-    setCTokenBalance: (balance) => {
-      dispatch({ type: 'SET_C_TOKEN_BALANCE', payload: balance });
-    },
-    exchangeRate: store.exchangeRate,
-    setExchangeRate: (rate) => {
-      dispatch({ type: 'SET_EXCHANGE_RATE', payload: rate });
-    },
-    isWalletConnectModalOpen: store.isWalletConnectModalOpen,
-    setWalletConnectModal: (open) => {
-      dispatch({ type: 'SET_WALLET_MODAL', payload: open });
-    },
-    txnStatus: store.txnStatus,
-    setTxnStatus: (status) => {
-      dispatch({ type: 'SET_TXN_STATUS', payload: status });
-    },
+    cexAddressMap: store.cexAddressMap,
+    setCEXAddress: (keypair) => {
+      dispatch({type: "SET_CEX_ADDRESS", payload: keypair});
+      // update csv
+    }
+
+    // some code to update store 
+    // ethBalance: store.ethBalance,
+    // setEthBalance: (balance) => {
+    //   dispatch({ type: 'SET_ETH_BALANCE', payload: balance });
+    // },
+
   };
 
   return <AppContext.Provider value={contextValue}>{children}</AppContext.Provider>;
