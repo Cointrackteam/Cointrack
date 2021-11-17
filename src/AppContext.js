@@ -1,26 +1,19 @@
 import React, { createContext, useReducer } from 'react';
-import {csv} from 'd3-request';
 import csxData from './static/db-data/csx-address-data.csv';
-
-const db = new Map();
-
-csv(csxData, (e, d) => {
-  if(e)console.log(e);
-  void d.map(dataPoint => db.set(dataPoint.exchangeAddress, dataPoint.exchangeName));
-})
-
+import {initializeDb, createdbMap, dbUpdate, getLatestDbData } from './web3-storage/web3-storage';
+initializeDb(csxData);
 const initialContext = {
-  cexAddressMap: db,
+  // cexAddressMap: createdbMap(getLatestDbData()),
   setCEXAddress: () => {}
   // getAddressName: () => {}, 
   // ethBalance: '--',
-
 };
+// getLatestDbData().then(data => initialContext = data.db);
 
 const appReducer = (state, { type, payload }) => {
   switch (type) {
-    case 'SET_CEX_ADDRESS':
-      return new Map([...state]).set(payload.key, payload.value);
+    case 'UPDATE_DB':
+      return new Map([...state, ...payload]);
     // case 'SET_ETH_BALANCE':
     //   return {
     //     ...state,
@@ -41,8 +34,10 @@ export const AppContextProvider = ({ children }) => {
 
   const contextValue = {
     cexAddressMap: store.cexAddressMap,
-    setCEXAddress: (keypair) => {
-      dispatch({type: "SET_CEX_ADDRESS", payload: keypair});
+    setCEXAddress: async (payload) => {
+      const newData = await dbUpdate(payload);
+      const newMap = createDbMap(newData);  
+      dispatch({type: "UPDATE_DB", payload: newMap});
       // update csv
     }
 

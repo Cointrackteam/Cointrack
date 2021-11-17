@@ -11,7 +11,9 @@ const Wallet = () => {
     
     const [injectedProvider, setInjectedProvider] = useState();
     const [userAddress, setUserAddress] = useState(); 
-    const cexAddressMap = useAppContext().cexAddressMap;
+    // const cexAddressMap = useAppContext().cexAddressMap;
+    // console.log(objs)
+    
 
     useEffect( () => {
         if (injectedProvider){
