@@ -1,10 +1,10 @@
 import React, { createContext, useReducer } from 'react';
 import csxData from './static/db-data/csx-address-data.csv';
 import {initializeDb, createdbMap, dbUpdate, getLatestDbData } from './web3-storage/web3-storage';
-// initializeDb(csxData);
-;
+
 getLatestDbData().then(data => void data.db.map(point => dbMap.set(point.exchangeAddress, point.exchangeName)));
 let dbMap = new Map();
+// initializeDb(csxData);
 const initialContext = {
   cexAddressMap: dbMap,
   setCEXAddress: () => {}

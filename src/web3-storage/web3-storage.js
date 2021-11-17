@@ -146,7 +146,7 @@ export function extractCSV(data){
     let db = []; 
     csv(data, (e, d) => {
         if(e)console.log(e);
-        void d.map(data => db.push({exchangeAddress: data.exchangeAddress, exchangeName: data.exchangeAddress }));
+        void d.map(data => db.push({exchangeAddress: data.exchangeAddress, exchangeName: data.exchangeName}));
     })
     return db
 }

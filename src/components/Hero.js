@@ -6,8 +6,10 @@ import HeaderBulbTable from "../static/images/header-bulb-table.png";
 import { Row, Col, Container, Card, Jumbotron } from 'react-bootstrap'; 
 
 const Hero = () => {
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit, formState: { errors } , watch } = useForm();
+    const addressField = watch("Ethereum Address"); 
     const onSubmit = data => console.log(data);
+
 
     return (
         <>  
@@ -21,7 +23,7 @@ const Hero = () => {
                         {/* <!-- Sign Up Form --> */}
                         <form onSubmit={handleSubmit(onSubmit)}>
                             <div className="form-group">
-                                <input type="text" className="form-control-input" placeholder="Ethereum Address" {...register("Ethereum Address", {required: true, maxLength: 42})} />
+                                <input type="text" className="form-control-input" value={window.ethereum ? window.ethereum.selectedAddress : undefined } placeholder="Ethereum Address" {...register("Ethereum Address", {required: true, maxLength: 42})} />
                             </div>
                             <div className="form-group">
                                 <button type="submit" className="form-control-submit-button">Lets find out</button>
@@ -92,7 +94,7 @@ const Hero = () => {
                             Improve Communications
                             </Card.Title>
                             <Card.Text>
-                            Months on ye at by esteem desire warmth former sure that that way gave any fond now his boy
+                                Months on ye at by esteem desire warmth former sure that that way gave any fond now his boy
                             </Card.Text>
                         </Card.Body>{/* <!-- end of card --> */}
                     </Card>
