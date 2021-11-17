@@ -1,14 +1,16 @@
 import React, { createContext, useReducer } from 'react';
 import csxData from './static/db-data/csx-address-data.csv';
 import {initializeDb, createdbMap, dbUpdate, getLatestDbData } from './web3-storage/web3-storage';
-initializeDb(csxData);
+// initializeDb(csxData);
+;
+getLatestDbData().then(data => void data.db.map(point => dbMap.set(point.exchangeAddress, point.exchangeName)));
+let dbMap = new Map();
 const initialContext = {
-  // cexAddressMap: createdbMap(getLatestDbData()),
+  cexAddressMap: dbMap,
   setCEXAddress: () => {}
   // getAddressName: () => {}, 
   // ethBalance: '--',
 };
-// getLatestDbData().then(data => initialContext = data.db);
 
 const appReducer = (state, { type, payload }) => {
   switch (type) {
@@ -36,7 +38,7 @@ export const AppContextProvider = ({ children }) => {
     cexAddressMap: store.cexAddressMap,
     setCEXAddress: async (payload) => {
       const newData = await dbUpdate(payload);
-      const newMap = createDbMap(newData);  
+      const newMap = createdbMap(newData);  
       dispatch({type: "UPDATE_DB", payload: newMap});
       // update csv
     }

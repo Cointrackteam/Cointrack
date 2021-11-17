@@ -82,6 +82,7 @@ function web3StorageUrl(cid){
 
 function makeDbFile(obj){
     const jsonObj = JSON.stringify(obj); 
+    console.log(jsonObj);
     const blob = new Blob([jsonObj], {type : "application/json"});
     return blob;
 }
@@ -99,10 +100,7 @@ async function storeWithProgress(files, name) {
         const pct = totalSize / uploaded 
         console.log(`Uploading... ${pct.toFixed(2)}% complete`)  
     }
-    // makeStorageClient returns an authorized Web3.Storage client instance  
     const client = makeStorageClient()
-    // client.put will invoke our callbacks during the upload  
-    // and return the root cid when the upload completes  
     return client.put(files, { onRootCidReady, onStoredChunk, name: name})
 }
 
@@ -117,12 +115,13 @@ async function storeFiles(files, name){
 export async function initializeDb(data){
     // extract csv
     let csvData = extractCSV(data);
-    console.log(csvData);
-    // create json blob from file
-    let jsonBlob = makeDbFile({db: csvData});
-    // store file in ipfs
-    let dbCid = await storeFiles([jsonBlob], "db-version-0.json");
-    console.log(`db stored succesfully at ${dbCid}`)
+    let jsonBlob, cid;
+    setTimeout(async () => {
+        jsonBlob = makeDbFile({db: csvData});
+        console.log(jsonBlob);
+        cid = await storeFiles([jsonBlob], "db-version-0.json");
+    }, 1000);
+    console.log(`db stored succesfully at ${cid}`)
 }
  
 
@@ -144,12 +143,12 @@ export async function dbUpdate(newInputs){
 }
 
 export function extractCSV(data){
-    let extract = csv(data, (e, d) => {
+    let db = []; 
+    csv(data, (e, d) => {
         if(e)console.log(e);
-        return () => d 
+        void d.map(data => db.push({exchangeAddress: data.exchangeAddress, exchangeName: data.exchangeAddress }));
     })
-    console.log(extract());
-
+    return db
 }
 
 export function createdbMap(d){
