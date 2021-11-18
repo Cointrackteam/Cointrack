@@ -1,6 +1,11 @@
 import { Spinner } from 'react-bootstrap';
-export default function Spinner (){
+export default function Loader (){
     return (
-        <Spinner animation="border" variant="primary"/>
+        <Spinner animation="border" 
+        as="span"
+        animation="border"
+        size="sm"
+        role="status"
+        aria-hidden="true"/>
     )
 }

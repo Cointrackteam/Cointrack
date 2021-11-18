@@ -1,5 +1,4 @@
 import React from 'react'; 
-import {useForm} from "react-hook-form";
 import Form from './Form';
 import Video from '../static/videos/placeholder.mp4';
 import ReactPlayer from 'react-player';
@@ -7,9 +6,6 @@ import HeaderBulbTable from "../static/images/header-bulb-table.png";
 import { Row, Col, Container, Card } from 'react-bootstrap'; 
 
 const Hero = () => {
-    const { register, handleSubmit, formState: { errors } , watch } = useForm();
-    const addressField = watch("Ethereum Address"); 
-    const onSubmit = data => console.log(data);
 
     return (
         <>  
@@ -21,14 +17,7 @@ const Hero = () => {
                         <p className="p-large">We analyze your transaction history and match it with public addresses of exchanges. Giving you detailed information about when and where you sent your coins.</p>
                         
                         {/* <!-- Sign Up Form --> */}
-                        <form onSubmit={handleSubmit(onSubmit)}>
-                            <div className="form-group">
-                                <input type="text" className="form-control-input" placeholder="Ethereum Address" {...register("Ethereum Address", {required: true, maxLength: 42})} />
-                            </div>
-                            <div className="form-group">
-                                <button type="submit" className="form-control-submit-button">Lets find out</button>
-                            </div>
-                        </form> {/* <!-- end of sign up form --> */}
+                        <Form />
                     </Container> {/* <!-- end of text-container --> */}
                 </Col>
                 <Col lg='6' xl='7'>

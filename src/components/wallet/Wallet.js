@@ -14,8 +14,6 @@ const Wallet = () => {
     
     const [injectedProvider, setInjectedProvider] = useState();
     const [userAddress, setUserAddress] = useState(); 
-    const cexAddressMap = useAppContext();
-    console.log(cexAddressMap);
 
     useEffect( () => {
         if (injectedProvider){
@@ -34,30 +32,40 @@ const Wallet = () => {
     // sets the provider for web3modal
     const loadWeb3Modal = useCallback(async () => {
         // const provider = await getProvider(); // creates a provider from web3modal
-        const provider = await web3Modal.connect()
-        setInjectedProvider(new ethers.providers.Web3Provider(provider));
+        let provider;
+        try {
+          provider = await web3Modal.connect()
+        } catch (e){
+          console.log(e);
+        }
+        if (provider) {
 
-        provider.on("chainChanged", chainId => {
-          console.log(`chain changed to ${chainId}! updating providers`);
           setInjectedProvider(new ethers.providers.Web3Provider(provider));
-        });
-    
-        provider.on("accountsChanged", () => {
-          console.log(`account changed!`);
-          setInjectedProvider(new ethers.providers.Web3Provider(provider));
-        });
-    
-        // Subscribe to session disconnection
-        provider.on("disconnect", (code, reason) => {
-          console.log(code, reason)
-          console.log(disconnect)
-          logoutOfWeb3Modal().then(r => console.log('logged out'));
-        });
+          
+          provider.on("chainChanged", chainId => {
+            console.log(`chain changed to ${chainId}! updating providers`);
+            setInjectedProvider(new ethers.providers.Web3Provider(provider));
+          });
+      
+          provider.on("accountsChanged", () => {
+            console.log(`account changed!`);
+            setInjectedProvider(new ethers.providers.Web3Provider(provider));
+          });
+      
+          // Subscribe to session disconnection
+          provider.on("disconnect", (code, reason) => {
+            console.log(code, reason)
+            logoutOfWeb3Modal()
+          });
+          
+        }
 
     }, [setInjectedProvider]);
 
     // logs out of web3Modal 
     const logoutOfWeb3Modal = async () => {
+
+        await web3Modal.clearCachedProvider();
 
         if (injectedProvider.provider && typeof injectedProvider.provider.disconnect == "function") {
           await injectedProvider.provider.disconnect();
@@ -68,7 +76,6 @@ const Wallet = () => {
         if (injectedProvider.disconnect){
           await injectedProvider.disconnect();
         }
-        await web3Modal.clearCachedProvider();
 
         setTimeout(() => {
           window.location.reload();
