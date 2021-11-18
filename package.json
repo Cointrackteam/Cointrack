@@ -22,6 +22,8 @@
     "fortmatic": "^2.2.1",
     "ipfs": "^0.60.0",
     "ipfs-http-client": "^54.0.0",
+    "jspdf": "^2.4.0",
+    "jspdf-autotable": "^3.5.23",
     "orbit-db": "^0.27.2",
     "qrcode.react": "^1.0.1",
     "react": "^17.0.1",

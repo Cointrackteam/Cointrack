@@ -8,10 +8,11 @@ let dbMap = new Map();
 const initialContext = {
   cexAddressMap: dbMap,
   setCEXAddress: () => {},
-  analysisCompleted: false,
+  isAnalysisCompleted: false,
   toggleAnalysCompleted: () => {},
-  analysisData: {},
-  setAnalysisData: () => {}
+  analysisResults: {},
+  setAnalysisResults: () => {},
+  
   // getAddressName: () => {}, 
   // ethBalance: '--',
 };
@@ -26,13 +27,23 @@ const appReducer = (state, { type, payload }) => {
     case 'TOGGLE_ANALYSIS_COMPLETED':
       return {
         ...state,
-        analysisCompleted: !state.analysisCompleted
+        isAnalysisCompleted: !state.analysisCompleted
       };
-    case 'SET_ANALYSIS_DATA': 
+    case 'SET_ANALYSIS_RESULTS': 
+      // console.log(payload);
       return {
         ...state,
-        analysisData: payload
-      }
+        analysisResults: {
+          ...state.analysisResults,
+          clientAddress: payload.clientAddress,
+          results: payload.results
+        }
+      };
+    // case 'SET_ANALYIS_RESULTS': 
+    //   return {
+    //     ...state,
+    //     analysisResults: payload
+    //   }
     default:
       return state;
   }
@@ -52,10 +63,10 @@ export const AppContextProvider = ({ children }) => {
       dispatch({type: "UPDATE_DB", payload: newMap});
       // update csv
     },
-    analysisCompleted: store.analysisCompleted,
+    isAnalysisCompleted: store.isAnalysisCompleted,
     toggleAnalysCompleted: () => dispatch({type: "TOGGLE_ANALYSIS_COMPLETED"}),
-    analysisData: store.analysisData, 
-    setAnalysisData: payload => dispatch({type: 'SET_ANALYSIS_DATA', payload: payload})
+    analysisResults: store.analysisResults, 
+    setAnalysisResults: payload => dispatch({type: 'SET_ANALYSIS_RESULTS', payload: payload})
     // some code to update store 
     // ethBalance: store.ethBalance,
     // setEthBalance: (balance) => {

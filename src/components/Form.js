@@ -4,16 +4,19 @@ import Loader from './Spinner';
 import { Button, Toast} from 'react-bootstrap'; 
 import { requestAction } from '../helpers/etherscan';
 import { useAppContext } from '../AppContext';
+import { analyzeNormalTransActions } from '../helpers/analyzetx';
+import FormAnalysis from './FormAnalysis';
 
 export default function Form(){
     const [showToastAddressSet, setShowToastAddressSet] = useState(false);
-    const { setAnalysisData, analysisData } = useAppContext();
-    const [ analysisResults, setAnalysisResults ] = useState(); 
-    console.log(analysisResults)
-    useEffect(() => 
-            setAnalysisResults(analysisData)
-    ,[analysisData]);
+    const { setAnalysisResults, analysisResults, cexAddressMap } = useAppContext();
 
+    useEffect(() => 
+            console.log("checking for results")
+    ,[analysisResults]);
+
+    console.log(analysisResults)
+    
     const { register, 
         formState, 
         setFocus, 
@@ -31,12 +34,13 @@ export default function Form(){
         }
     }) 
 
-    const onSubmit = async (data, e) => {
-        let res = await requestAction('get_account_transactions', data.ethAddress);
-        // console.log(res.data);
-        setAnalysisData(res.data);
-        // console.log(analysisData);
-
+    const onSubmit = async (data, e) => { 
+        // should trigger a payment flow first
+        // if payment is completed then trigger analysis
+        let response = await requestAction('get_account_transactions', data.ethAddress);
+        let results = analyzeNormalTransActions(response.data.result, cexAddressMap);
+        console.log(results);
+        setAnalysisResults({clientAddress: data.ethAddress, results: results});
     } 
 
     const onError = (errors, e) => {
@@ -92,12 +96,17 @@ export default function Form(){
         </div>
     )
 
-
+    const results = {
+        results: 'no results'
+    }
     return (
-        <form onSubmit={handleSubmit(onSubmit, onError)}>
-            {input}
-            {buttons}
-            {setAccountAddressButton}
-        </form>
+        <>
+            <form onSubmit={handleSubmit(onSubmit, onError)}>
+                {input}
+                {buttons}
+                {setAccountAddressButton}
+            </form>
+            <FormAnalysis props={results}/>
+        </>
     )
 }
