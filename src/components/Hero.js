@@ -1,15 +1,15 @@
 import React from 'react'; 
 import {useForm} from "react-hook-form";
+import Form from './Form';
 import Video from '../static/videos/placeholder.mp4';
 import ReactPlayer from 'react-player';
 import HeaderBulbTable from "../static/images/header-bulb-table.png";
-import { Row, Col, Container, Card, Jumbotron } from 'react-bootstrap'; 
+import { Row, Col, Container, Card } from 'react-bootstrap'; 
 
 const Hero = () => {
     const { register, handleSubmit, formState: { errors } , watch } = useForm();
     const addressField = watch("Ethereum Address"); 
     const onSubmit = data => console.log(data);
-
 
     return (
         <>  
@@ -23,7 +23,7 @@ const Hero = () => {
                         {/* <!-- Sign Up Form --> */}
                         <form onSubmit={handleSubmit(onSubmit)}>
                             <div className="form-group">
-                                <input type="text" className="form-control-input" value={window.ethereum ? window.ethereum.selectedAddress : undefined } placeholder="Ethereum Address" {...register("Ethereum Address", {required: true, maxLength: 42})} />
+                                <input type="text" className="form-control-input" placeholder="Ethereum Address" {...register("Ethereum Address", {required: true, maxLength: 42})} />
                             </div>
                             <div className="form-group">
                                 <button type="submit" className="form-control-submit-button">Lets find out</button>
