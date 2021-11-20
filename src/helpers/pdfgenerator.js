@@ -56,7 +56,7 @@ export function createPDF(walletAddress, data){
             theme: 'grid',
             margin: {top: marginY}
     });
-    console.log(parseData(data))
+    console.log(parseData(data));
 
     function parseData(data){
         return data.map( data => (

@@ -9,7 +9,6 @@ const Hero = () => {
 
     return (
         <>  
-
             <Row>
                 <Col lg={6} xl={5}>
                     <Container as='div' className="text-container">

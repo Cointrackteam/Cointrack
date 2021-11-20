@@ -1,4 +1,4 @@
-import { Web3Storage } from 'web3.storage/dist/bundle.esm.min.js';
+import { Web3Storage } from 'web3.storage';
 import { create } from 'ipfs-http-client';
 const axios = require('axios');
 import {csv} from 'd3-request';
