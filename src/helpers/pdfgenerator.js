@@ -60,8 +60,8 @@ export function createPDF(walletAddress, data){
 
     function parseData(data){
         return data.map( data => (
-                [data.cxName, data.direction === 'to' ? String(`Your wallet sent tokens to ${data.cxName} on ${new Date(data.timestamp)}`):
-                String(`Your wallet received tokens from ${data.cxName} on ${new Date(data.timestamp)}`)]
+                [data.cxName, data.direction === 'to' ? String(`Your wallet sent tokens to ${data.cxName} on ${new Date(Number(data.timestamp))}`):
+                String(`Your wallet received tokens from ${data.cxName} on ${new Date(Number(data.timestamp))}`)]
             )
         )
     }

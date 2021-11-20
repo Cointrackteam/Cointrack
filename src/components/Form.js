@@ -5,17 +5,17 @@ import { Button, Toast} from 'react-bootstrap';
 import { requestAction } from '../helpers/etherscan';
 import { useAppContext } from '../AppContext';
 import { analyzeNormalTransActions } from '../helpers/analyzetx';
-import FormAnalysis from './FormAnalysis';
+import DownloadPDF from './DownloadPDF';
+import AccountAddressButton from './AccountAddressButton';
 
 export default function Form(){
-    const [showToastAddressSet, setShowToastAddressSet] = useState(false);
     const { setAnalysisResults, analysisResults, cexAddressMap } = useAppContext();
+    const {analysisReady, setAnalysisReady } = useState(false);
 
     useEffect(() => 
             console.log("checking for results")
     ,[analysisResults]);
 
-    console.log(analysisResults)
     
     const { register, 
         formState, 
@@ -37,8 +37,12 @@ export default function Form(){
     const onSubmit = async (data, e) => { 
         // should trigger a payment flow first
         // if payment is completed then trigger analysis
+        // start payment 
+        // receive transaction
+        // start analysis -> trigger 
         let response = await requestAction('get_account_transactions', data.ethAddress);
         let results = analyzeNormalTransActions(response.data.result, cexAddressMap);
+
         console.log(results);
         setAnalysisResults({clientAddress: data.ethAddress, results: results});
     } 
@@ -71,23 +75,7 @@ export default function Form(){
     ) 
 
     let styleToast = {position: "absolute", marginTop: "15px"}
-    const setAccountAddressButton = (
-        
-        <div className="form-group">
-            <Button className="btn-solid-sm" 
-            onClick={() => 
-                window.ethereum.selectedAddress ? 
-                setValue("ethAddress", window.ethereum.selectedAddress):
-                setValue("ethAddress", "") 
-            }
-            >Use wallet Address</Button>
-            <Toast show={showToastAddressSet} onClose={()=>{setShowToastAddressSet(false)}} delay={1500} style={styleToast} className='bg-danger text-light' autohide>
-                <Toast.Body className="p-2">
-                    <span className="mr-auto">connect to wallet</span> 
-                </Toast.Body>
-            </Toast>
-        </div>
-    )
+   
 
     const buttons = (
         <div className="form-group">
@@ -104,9 +92,9 @@ export default function Form(){
             <form onSubmit={handleSubmit(onSubmit, onError)}>
                 {input}
                 {buttons}
-                {setAccountAddressButton}
+                <AccountAddressButton setAddress={setValue} />
+                <DownloadPDF analysisReady={analysisReady}/> 
             </form>
-            <FormAnalysis props={results}/>
         </>
     )
 }

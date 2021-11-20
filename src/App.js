@@ -3,6 +3,7 @@ import React from 'react';
 import Home from './pages/Home';
 import Header from './components/Header'
 import { Routes, Route , BrowserRouter as Router} from 'react-router-dom';
+import 'react-toastify/dist/ReactToastify.css';
 import { AppContextProvider } from './AppContext';
 
 // css
