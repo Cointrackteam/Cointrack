@@ -1,6 +1,10 @@
+
+require('dotenv').config();
+
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const Dotenv = require('dotenv-webpack');
-const webpack = require('webpack');
+const { ProvidePlugin, EnvironmentPlugin } = require('webpack');
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 
 let mode = "development";
 if (process.env.NODE_ENV === 'production'){
@@ -57,10 +61,19 @@ module.exports = {
     },
     devtool: 'source-map',
     plugins: [
-        new webpack.ProvidePlugin({process: ['process/browser.js']}),
-        new webpack.ProvidePlugin({Buffer: ['buffer', 'Buffer']}),
-        new Dotenv(),
+        new Dotenv({
+            path: './.env',
+            safe: true,
+            allowEmptyValues: true,
+            systemvars: true,
+            silent: true,
+            defaults: false
+        }),
+        new ProvidePlugin({process: ['process/browser.js']}),
+        new ProvidePlugin({Buffer: ['buffer', 'Buffer']}),
         new MiniCssExtractPlugin(),
+        new ReactRefreshWebpackPlugin(),
+        new EnvironmentPlugin({...process.env})
     ]
     // target: ['node', 'web', 'es6' ],
 }
