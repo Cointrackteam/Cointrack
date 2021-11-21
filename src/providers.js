@@ -4,7 +4,7 @@ import Fortmatic from "fortmatic";
 import Authereum from "authereum";
 import WalletLink from "walletlink";
 import WalletConnectProvider from "@walletconnect/web3-provider";
-import { INFURA_ID, FORTMATIC_API_KEY as FORTMATIC_KEY, PORTIS_ID} from '../../constants'; 
+import { INFURA_ID, FORTMATIC_API_KEY as FORTMATIC_KEY, PORTIS_ID} from './constants'; 
 
 // Coinbase walletLink init
 const walletLink = new WalletLink({

@@ -1,3 +1,6 @@
 import { InjectedConnector } from '@web3-react/injected-connector';
+import { CHAINIDS } from './constants';
 
-export const injected = new InjectedConnector({ supportedChainIds: [1, 4, 42] });
+export const injectedConnecter = new InjectedConnector({
+    supportedChainIds: CHAINIDS()
+});

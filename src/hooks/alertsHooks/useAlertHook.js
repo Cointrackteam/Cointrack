@@ -13,37 +13,32 @@ function generateOptions(position, type, delay, onOpen, onClose){
 }
 
 export function useAlert(message, position, type, delay, onOpen = undefined, onClose=undefined) {
-
     const [trigger, setTrigger] = useState(false);
     const options = generateOptions(position, type, delay, onOpen, onClose);
+    const manualTrigger = m => { toast(m, options) }
     useEffect(()=>{
-        if (trigger){
+        if(trigger){
             toast(message, options);
         }
     }, [trigger])
-    return [setTrigger];
+    return [setTrigger, manualTrigger];
 }
 
-export function useAlertWithPromise(resolve, args,message){
-    const [trigger, setTrigger] = useState(false);
+export function useAlertWithPromise(resolve, message){
     const promise = new Promise((resolve, rej) => {
         if (args){
+            console.log(args);
             resolve(...args);
         } else {
             resolve();
         }
-        toast.promise(resolve, {
-            pending: message.pending,
-            success: message.success, 
-            error: message.error
-        })
+        toast.promise(resolve, ...message);
     });
-    
-    useEffect(()=>{
-        if(trigger){  
-            promise();          
-        }
-    }, [setTrigger])
+    console.log(promise)
+    return promise;
+}
 
-    return setTrigger;
+export function alert(message, position, type, delay, onOpen, onClose){
+    const options = generateOptions(position, type, delay, onOpen, onClose);
+    return () => toast(message, options)
 }

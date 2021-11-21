@@ -5,8 +5,7 @@ import ReactPlayer from 'react-player';
 import HeaderBulbTable from "../static/images/header-bulb-table.png";
 import { Row, Col, Container, Card } from 'react-bootstrap'; 
 
-const Hero = () => {
-
+const Hero = ({userAddress, targetNetwork, chainId}) => {
     return (
         <>  
             <Row>
@@ -16,7 +15,7 @@ const Hero = () => {
                         <p className="p-large">We analyze your transaction history and match it with public addresses of exchanges. Giving you detailed information about when and where you sent your coins.</p>
                         
                         {/* <!-- Sign Up Form --> */}
-                        <HeroForm />
+                        <HeroForm userAddress={userAddress} chainId={chainId} targetNetwork={targetNetwork} />
                     </Container> {/* <!-- end of text-container --> */}
                 </Col>
                 <Col lg='6' xl='7'>

@@ -1,6 +1,5 @@
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
-import { doc } from 'prettier';
 import logo from '../static/images/customer-logo-6.png';
 
 const marginX = 25;
@@ -14,13 +13,7 @@ export function createPDF(walletAddress, data){
         unit: 'px',
         format: 'a4'
     })
-    const totalPagesExp = '{total_pages_count_string}'
-    // var pageHeight = pdf.internal.pageSize.height || doc.internal.pageSize.getHeight();
-    // var pageWidth = pdf.internal.pageSize.width || doc.internal.pageSize.getWidth();
-    // console.log(pageHeight);
-    // console.log(pageWidth);
-    // let tableHeightStart = pdf.getTextDimensions("Transaction Report").h + marginY + marginY + marginY;
-    
+
     pdf.autoTable({
         startY: 50,
         head: [
@@ -44,11 +37,7 @@ export function createPDF(walletAddress, data){
 
             // footer 
             let str = 'Page ' + pdf.internal.getNumberOfPages();
-            // if (typeof pdf.putTotalPages === 'function') {
-            //     str = str + ' of ' + totalPagesExp
-            // } 
             pdf.setFontSize(10)
-            // jsPDF 1.4+ uses getWidth, <1.4 uses .width
             let pageSize = pdf.internal.pageSize
             let pageHeight = pageSize.height ? pageSize.height : pageSize.getHeight()
             pdf.text(str, marginX, pageHeight - 10)

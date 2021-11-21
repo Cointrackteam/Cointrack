@@ -8,18 +8,13 @@ import useLogger from "../hooks/useLogger";
 
 
 // dowload form 
-export default function DownLoadPDF({analysisReady}) {
-    useLogger(analysisResults);
+export default function DownLoadPDF() {
     const { analysisResults } = useAppContext();
-    const [show, setShow] =  useState(false);
-    const [setTrigger] = useAlert('pdf ready for download', 'bottom-right', 'info', 1.5);
- 
+    const [setTrigger, manualTrigger] = useAlert('pdf ready for download', 'bottom-right', 'info', 1.5);
+    
     useEffect(()=> {
-        if(analysisReady){
-            setTrigger(true);    
-            setShow(true);
-        }
-    }, [analysisResults.results])
+        setTrigger(true);    
+    })
 
     const downloadButton = (
             <Col lg='5'>
@@ -29,9 +24,7 @@ export default function DownLoadPDF({analysisReady}) {
 
     return (
         <>
-            {
-                show ? downloadButton : null 
-            } 
+            {downloadButton}
             <ToastContainer />
         </>
     )

@@ -3,11 +3,15 @@ import { Container } from 'react-bootstrap';
 import Hero from '../../components/Hero';
 
 
-const Home = () => {
+const Home = ({userAddress, targetNetwork, chainId}) => {
   return (
     <div id='header' className="header">
       <Container>
-        <Hero />
+        <Hero
+          userAddress={userAddress} 
+          targetNetwork={targetNetwork} 
+          chainId={chainId}
+        />
       </Container> 
     </div>
   );
