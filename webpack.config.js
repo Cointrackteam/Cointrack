@@ -15,7 +15,8 @@ module.exports = {
     mode: mode,
     devServer: {
         static: "./dist",
-        hot: true
+        hot: true,
+        historyApiFallback: true, 
     },
     module: {
         rules:[

@@ -1,5 +1,5 @@
 import React from 'react'; 
-import Form from './Form';
+import HeroForm from './HeroForm';
 import Video from '../static/videos/placeholder.mp4';
 import ReactPlayer from 'react-player';
 import HeaderBulbTable from "../static/images/header-bulb-table.png";
@@ -16,7 +16,7 @@ const Hero = () => {
                         <p className="p-large">We analyze your transaction history and match it with public addresses of exchanges. Giving you detailed information about when and where you sent your coins.</p>
                         
                         {/* <!-- Sign Up Form --> */}
-                        <Form />
+                        <HeroForm />
                     </Container> {/* <!-- end of text-container --> */}
                 </Col>
                 <Col lg='6' xl='7'>

@@ -3,24 +3,24 @@ import { Button, Badge } from 'react-bootstrap';
 import { options } from  './providers'; 
 import { shortenAddress } from '../../utils/shortenAddress';
 import { useAppContext } from '../../AppContext';
+import {useAddressHook} from '../../hooks/addressHooks/useAddressHook';
+
 import Web3Modal from 'web3modal';
 
 const ethers = require('ethers');
-// console.log(web3Modal);
 
 // wallet instance
 const Wallet = () => {
   const web3Modal = new Web3Modal(options);
     
     const [injectedProvider, setInjectedProvider] = useState();
-    const [userAddress, setUserAddress] = useState(); 
+    const [address] = useAddressHook([injectedProvider]) 
 
-    useEffect( () => {
-        if (injectedProvider){
-          console.log(injectedProvider != undefined)
-            setUserAddress(shortenAddress(window.ethereum.selectedAddress));
-        }
-    }, [injectedProvider])
+    // useEffect( () => {
+    //     if (injectedProvider){
+
+    //     }
+    // }, [injectedProvider])
 
     useEffect(() => {
         if (web3Modal.cachedProvider) {
@@ -86,9 +86,14 @@ const Wallet = () => {
                 Connect
             </Button>
             ) : (
-                <Button className="btn-solid-sm page-scroll" onClick={logoutOfWeb3Modal}>
+                <Button className="btn-solid-sm page-scroll" 
+                style={{
+                  fontSize: '1rem',
+                  padding: "0.75rem 1rem 0.75rem 1rem"
+                }}
+                onClick={logoutOfWeb3Modal}>
                     Disconnect
-                    <Badge varient='light'>{userAddress}</Badge>
+                    <Badge pill variant="info">{shortenAddress(address)}</Badge>
                 </Button>
             )  
     return (

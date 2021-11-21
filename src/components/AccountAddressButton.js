@@ -1,26 +1,17 @@
 import React, {useState, useEffect} from 'react'
-import {Button} from 'react-bootstrap';
-import { useIsAccountLoggedIn } from '../hooks/useAddressHooks';
+import {Button, Col} from 'react-bootstrap';
+import { useAddressHook } from '../hooks/addressHooks/useAddressHook';
+import useLogger from '../hooks/useLogger';
 
 export default function AccountAddressButton({callback}) {
-    // const [address, setAddress] = useState();
-    const address = useIsAccountLoggedIn([window]);
-    
-    // function isAccountLogged(){
-    //     window.ethereum.request({ method: 'eth_requestAccounts'})
-    //     .then(accounts => accounts[0].length > 0  ? setAddress(accounts[0]) : null);
-    // }
-    
-    useEffect(()=>{
-        // isAccountLogged();
-    }, [address])
+    const [address, setAddress] = useAddressHook([window.ethereum]);
     
     const button = (
-        <div className="form-group">
-            <Button className="btn-solid-sm" onClick={() => callback("ethAddress", address)}> 
-                Use wallet Address
+        <Col lg='5' >
+            <Button className="btn-solid-sm" style={{width: "100%"}} onClick={() => callback("ethAddress", address)} > 
+                    Use wallet Address
             </Button>
-        </div>
+        </Col>
     ) 
     return (
         address ? button : null

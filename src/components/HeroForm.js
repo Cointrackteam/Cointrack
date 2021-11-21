@@ -1,19 +1,17 @@
 import React, {useState, useEffect } from 'react';
 import { useForm}  from "react-hook-form";
-import Loader from './Spinner';
-import { Button, Toast} from 'react-bootstrap'; 
+import { Button, Form, InputGroup, FormControl, Spinner, Col, Row} from 'react-bootstrap'; 
 import { requestAction } from '../helpers/etherscan';
 import { useAppContext } from '../AppContext';
 import { analyzeNormalTransActions } from '../helpers/analyzetx';
 import DownloadPDF from './DownloadPDF';
 import AccountAddressButton from './AccountAddressButton';
 
-export default function Form(){
+export default function HeroForm(){
     const { setAnalysisResults, analysisResults, cexAddressMap } = useAppContext();
-    const {analysisReady, setAnalysisReady } = useState(false);
+    const [analysisReady, setAnalysisReady ] = useState(false);
 
-    useEffect(() => 
-            console.log("checking for results")
+    useEffect(() => setAnalysisReady(true )
     ,[analysisResults]);
 
     
@@ -40,10 +38,11 @@ export default function Form(){
         // start payment 
         // receive transaction
         // start analysis -> trigger 
+        console.log(data);
         let response = await requestAction('get_account_transactions', data.ethAddress);
         let results = analyzeNormalTransActions(response.data.result, cexAddressMap);
 
-        console.log(results);
+        // console.log(results);
         setAnalysisResults({clientAddress: data.ethAddress, results: results});
     } 
 
@@ -52,49 +51,41 @@ export default function Form(){
         console.log(e);
     } 
     
-    const input = (
-        <div className="form-group">
-            <input className="form-control-input" placeholder="Ethereum Address" {...register("ethAddress", {required: "eth address invalid", maxLength: 42})}/>
-        </div>
-    )
+    
 
     const spinnerButton = (
-        <Button variant="primary" disabled>
-            <Loader
-            as="span"
-            animation="border"
-            size="sm"
-            role="status"
-            aria-hidden="true"
-            />
-            <span className="sr-only">Loading...</span>
-        </Button> 
+        <Button variant="primary" >Analyzing...
+            <Spinner as="span" animation="border" size="lg" role="status" aria-hidden="true"/>
+        </Button>            
     )
+
     const submitButton = (
-        <Button type="submit" className="form-control-submit-button">Lets find out</Button>
+        <>
+            <Button type="submit" className="form-control-submit-button">Lets find out</Button>
+        </>
     ) 
+  
 
-    let styleToast = {position: "absolute", marginTop: "15px"}
-   
-
-    const buttons = (
-        <div className="form-group">
-            {/* {console.log(isSubmitting)} */}
-            {isSubmitting ? spinnerButton : submitButton }
-        </div>
+    const inputWithButton = (
+        <>
+            <InputGroup className="mb-3" {...register("ethAddress", {required: "eth address invalid", maxLength: 42})}>
+                <FormControl placeholder="Ethereum Address" className="p-2"/>
+                    { !isSubmitting ? submitButton : spinnerButton}
+            </InputGroup>
+        </>
     )
 
-    const results = {
-        results: 'no results'
-    }
     return (
         <>
-            <form onSubmit={handleSubmit(onSubmit, onError)}>
-                {input}
-                {buttons}
-                <AccountAddressButton setAddress={setValue} />
-                <DownloadPDF analysisReady={analysisReady}/> 
-            </form>
+            <Form onSubmit={handleSubmit(onSubmit, onError)}>
+                <Form.Group >
+                    {inputWithButton}
+                </Form.Group>
+                <Form.Group >
+                    <AccountAddressButton callback={setValue} />
+                    <DownloadPDF analysisReady={analysisReady}/> 
+                </Form.Group>
+            </Form>
         </>
     )
 }

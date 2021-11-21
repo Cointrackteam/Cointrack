@@ -16,10 +16,9 @@ const App = (props) => {
       <Router >  
           <Header />
           <Routes>
-            <Route exact path="/" element={Home}/>
+            <Route exact path="/" element={<Home />}/>
           </Routes>
       </Router>
-      <Home />
     </AppContextProvider>
   );
 };
