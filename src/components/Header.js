@@ -11,6 +11,7 @@ export default function Header({loadWeb3Modal, logoutOfWeb3Modal, providerOrSign
               <Navbar.Brand className="logo-image" href="/">
                 <img
                 src={logo}
+                style={{height: "3.75rem"}}
                 alt="Cointrack"/>
               </Navbar.Brand>
               

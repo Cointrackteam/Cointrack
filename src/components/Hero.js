@@ -2,7 +2,7 @@ import React from 'react';
 import HeroForm from './HeroForm';
 import Video from '../static/videos/placeholder.mp4';
 import ReactPlayer from 'react-player';
-import HeaderBulbTable from "../static/images/header-bulb-table.png";
+import fisherman from "../static/images/fisherman.svg";
 import { Row, Col, Container, Card } from 'react-bootstrap'; 
 
 const Hero = ({userAddress, targetNetwork, chainId}) => {
@@ -20,7 +20,7 @@ const Hero = ({userAddress, targetNetwork, chainId}) => {
                 </Col>
                 <Col lg='6' xl='7'>
                     <Container as='div' className='img-container'>
-                        <img className='image-fluid' src={HeaderBulbTable} alt="alternative"></img>
+                        <img className='image-fluid' src={fisherman} style={{width: "150%"}} alt="alternative"></img>
                     </Container> {/* <!-- end of image-container --> */}
                 </Col>{/* <!-- end of col --> */}
             </Row >
