@@ -26,12 +26,6 @@ export function useAlert(message, position, type, delay, onOpen = undefined, onC
 
 export function useAlertWithPromise(resolve, message){
     const promise = new Promise((resolve, rej) => {
-        if (args){
-            console.log(args);
-            resolve(...args);
-        } else {
-            resolve();
-        }
         toast.promise(resolve, ...message);
     });
     console.log(promise)

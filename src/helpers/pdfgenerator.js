@@ -1,6 +1,6 @@
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
-import logo from '../static/images/customer-logo-6.png';
+import logo from '../static/images/logo-main.png';
 
 const marginX = 25;
 const marginY = 25;
@@ -43,9 +43,8 @@ export function createPDF(walletAddress, data){
             pdf.text(str, marginX, pageHeight - 10)
             },
             theme: 'grid',
-            margin: {top: marginY}
+            margin: {top: marginY + 15}
     });
-    console.log(parseData(data));
 
     function parseData(data){
         return data.map( data => (
