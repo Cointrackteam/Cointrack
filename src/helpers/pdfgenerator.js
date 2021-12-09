@@ -14,6 +14,12 @@ export function createPDF(walletAddress, data){
         format: 'a4'
     })
 
+    pdf.setFont('courier', 'bold');
+    pdf.setFontSize(21);
+    pdf.setTextColor("#110404");
+    pdf.addImage(logo, 'SVG', marginX, 10, 35, 35);        
+    pdf.text("Transaction Report", marginX + 50, marginY + 17.5, 'left');
+    
     pdf.autoTable({
         startY: 50,
         head: [
@@ -29,11 +35,6 @@ export function createPDF(walletAddress, data){
         headStyles: {halign: 'left', fillColor: "#0099ff", textColor: "#ffffff"},
         bodyStyles: {halign: 'left', textColor: "#000000"},
         didDrawPage: () => {
-            pdf.setFont('courier', 'bold');
-            pdf.setFontSize(21);
-            pdf.setTextColor("#110404");
-            pdf.addImage(logo, 'SVG', marginX, marginY);        
-            pdf.text("Transaction Report", marginX + 50, marginY, 'left');
 
             // footer 
             let str = 'Page ' + pdf.internal.getNumberOfPages();
@@ -48,7 +49,7 @@ export function createPDF(walletAddress, data){
 
     function parseData(data){
         return data.map( data => (
-                [data.cxName, data.direction === 'to' ? String(`Your wallet sent tokens to ${data.cxName} on ${new Date(Number(data.timestamp))}`):
+                [data.cxName, data.direction === 'to' ? String(`Your wallet sent tokens to ${data.cxName} on ${new Date(Number(data.timestamp) * 1000)}`):
                 String(`Your wallet received tokens from ${data.cxName} on ${new Date(Number(data.timestamp))}`)]
             )
         )

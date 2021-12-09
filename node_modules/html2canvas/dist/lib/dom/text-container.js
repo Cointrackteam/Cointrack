@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TextContainer = void 0;
-var text_transform_1 = require("../css/property-descriptors/text-transform");
 var text_1 = require("../css/layout/text");
 var TextContainer = /** @class */ (function () {
     function TextContainer(context, node, styles) {
@@ -13,11 +12,11 @@ var TextContainer = /** @class */ (function () {
 exports.TextContainer = TextContainer;
 var transform = function (text, transform) {
     switch (transform) {
-        case text_transform_1.TEXT_TRANSFORM.LOWERCASE:
+        case 1 /* LOWERCASE */:
             return text.toLowerCase();
-        case text_transform_1.TEXT_TRANSFORM.CAPITALIZE:
+        case 3 /* CAPITALIZE */:
             return text.replace(CAPITALIZE, capitalize);
-        case text_transform_1.TEXT_TRANSFORM.UPPERCASE:
+        case 2 /* UPPERCASE */:
             return text.toUpperCase();
         default:
             return text;

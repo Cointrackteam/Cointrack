@@ -3,11 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.calculateBackgroundRepeatPath = exports.getBackgroundValueForIndex = exports.calculateBackgroundSize = exports.isAuto = exports.calculateBackgroundRendering = exports.calculateBackgroundPaintingArea = exports.calculateBackgroundPositioningArea = void 0;
 var background_size_1 = require("../css/property-descriptors/background-size");
 var vector_1 = require("./vector");
-var background_repeat_1 = require("../css/property-descriptors/background-repeat");
 var length_percentage_1 = require("../css/types/length-percentage");
 var parser_1 = require("../css/syntax/parser");
 var box_sizing_1 = require("./box-sizing");
-var background_clip_1 = require("../css/property-descriptors/background-clip");
 var calculateBackgroundPositioningArea = function (backgroundOrigin, element) {
     if (backgroundOrigin === 0 /* BORDER_BOX */) {
         return element.bounds;
@@ -19,10 +17,10 @@ var calculateBackgroundPositioningArea = function (backgroundOrigin, element) {
 };
 exports.calculateBackgroundPositioningArea = calculateBackgroundPositioningArea;
 var calculateBackgroundPaintingArea = function (backgroundClip, element) {
-    if (backgroundClip === background_clip_1.BACKGROUND_CLIP.BORDER_BOX) {
+    if (backgroundClip === 0 /* BORDER_BOX */) {
         return element.bounds;
     }
-    if (backgroundClip === background_clip_1.BACKGROUND_CLIP.CONTENT_BOX) {
+    if (backgroundClip === 2 /* CONTENT_BOX */) {
         return box_sizing_1.contentBox(element);
     }
     return box_sizing_1.paddingBox(element);
@@ -155,21 +153,21 @@ var calculateBackgroundRepeatPath = function (repeat, _a, _b, backgroundPosition
     var x = _a[0], y = _a[1];
     var width = _b[0], height = _b[1];
     switch (repeat) {
-        case background_repeat_1.BACKGROUND_REPEAT.REPEAT_X:
+        case 2 /* REPEAT_X */:
             return [
                 new vector_1.Vector(Math.round(backgroundPositioningArea.left), Math.round(backgroundPositioningArea.top + y)),
                 new vector_1.Vector(Math.round(backgroundPositioningArea.left + backgroundPositioningArea.width), Math.round(backgroundPositioningArea.top + y)),
                 new vector_1.Vector(Math.round(backgroundPositioningArea.left + backgroundPositioningArea.width), Math.round(height + backgroundPositioningArea.top + y)),
                 new vector_1.Vector(Math.round(backgroundPositioningArea.left), Math.round(height + backgroundPositioningArea.top + y))
             ];
-        case background_repeat_1.BACKGROUND_REPEAT.REPEAT_Y:
+        case 3 /* REPEAT_Y */:
             return [
                 new vector_1.Vector(Math.round(backgroundPositioningArea.left + x), Math.round(backgroundPositioningArea.top)),
                 new vector_1.Vector(Math.round(backgroundPositioningArea.left + x + width), Math.round(backgroundPositioningArea.top)),
                 new vector_1.Vector(Math.round(backgroundPositioningArea.left + x + width), Math.round(backgroundPositioningArea.height + backgroundPositioningArea.top)),
                 new vector_1.Vector(Math.round(backgroundPositioningArea.left + x), Math.round(backgroundPositioningArea.height + backgroundPositioningArea.top))
             ];
-        case background_repeat_1.BACKGROUND_REPEAT.NO_REPEAT:
+        case 1 /* NO_REPEAT */:
             return [
                 new vector_1.Vector(Math.round(backgroundPositioningArea.left + x), Math.round(backgroundPositioningArea.top + y)),
                 new vector_1.Vector(Math.round(backgroundPositioningArea.left + x + width), Math.round(backgroundPositioningArea.top + y)),

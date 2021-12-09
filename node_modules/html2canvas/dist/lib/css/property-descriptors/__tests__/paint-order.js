@@ -8,79 +8,79 @@ describe('property-descriptors', function () {
     describe('paint-order', function () {
         it('none', function () {
             return assert_1.deepStrictEqual(paintOrderParse('none'), [
-                paint_order_1.PAINT_ORDER_LAYER.FILL,
-                paint_order_1.PAINT_ORDER_LAYER.STROKE,
-                paint_order_1.PAINT_ORDER_LAYER.MARKERS
+                0 /* FILL */,
+                1 /* STROKE */,
+                2 /* MARKERS */
             ]);
         });
         it('EMPTY', function () {
             return assert_1.deepStrictEqual(paintOrderParse(''), [
-                paint_order_1.PAINT_ORDER_LAYER.FILL,
-                paint_order_1.PAINT_ORDER_LAYER.STROKE,
-                paint_order_1.PAINT_ORDER_LAYER.MARKERS
+                0 /* FILL */,
+                1 /* STROKE */,
+                2 /* MARKERS */
             ]);
         });
         it('other values', function () {
             return assert_1.deepStrictEqual(paintOrderParse('other values'), [
-                paint_order_1.PAINT_ORDER_LAYER.FILL,
-                paint_order_1.PAINT_ORDER_LAYER.STROKE,
-                paint_order_1.PAINT_ORDER_LAYER.MARKERS
+                0 /* FILL */,
+                1 /* STROKE */,
+                2 /* MARKERS */
             ]);
         });
         it('normal', function () {
             return assert_1.deepStrictEqual(paintOrderParse('normal'), [
-                paint_order_1.PAINT_ORDER_LAYER.FILL,
-                paint_order_1.PAINT_ORDER_LAYER.STROKE,
-                paint_order_1.PAINT_ORDER_LAYER.MARKERS
+                0 /* FILL */,
+                1 /* STROKE */,
+                2 /* MARKERS */
             ]);
         });
         it('stroke', function () {
             return assert_1.deepStrictEqual(paintOrderParse('stroke'), [
-                paint_order_1.PAINT_ORDER_LAYER.STROKE,
-                paint_order_1.PAINT_ORDER_LAYER.FILL,
-                paint_order_1.PAINT_ORDER_LAYER.MARKERS
+                1 /* STROKE */,
+                0 /* FILL */,
+                2 /* MARKERS */
             ]);
         });
         it('fill', function () {
             return assert_1.deepStrictEqual(paintOrderParse('fill'), [
-                paint_order_1.PAINT_ORDER_LAYER.FILL,
-                paint_order_1.PAINT_ORDER_LAYER.STROKE,
-                paint_order_1.PAINT_ORDER_LAYER.MARKERS
+                0 /* FILL */,
+                1 /* STROKE */,
+                2 /* MARKERS */
             ]);
         });
         it('markers', function () {
             return assert_1.deepStrictEqual(paintOrderParse('markers'), [
-                paint_order_1.PAINT_ORDER_LAYER.MARKERS,
-                paint_order_1.PAINT_ORDER_LAYER.FILL,
-                paint_order_1.PAINT_ORDER_LAYER.STROKE
+                2 /* MARKERS */,
+                0 /* FILL */,
+                1 /* STROKE */
             ]);
         });
         it('stroke fill', function () {
             return assert_1.deepStrictEqual(paintOrderParse('stroke fill'), [
-                paint_order_1.PAINT_ORDER_LAYER.STROKE,
-                paint_order_1.PAINT_ORDER_LAYER.FILL,
-                paint_order_1.PAINT_ORDER_LAYER.MARKERS
+                1 /* STROKE */,
+                0 /* FILL */,
+                2 /* MARKERS */
             ]);
         });
         it('markers stroke', function () {
             return assert_1.deepStrictEqual(paintOrderParse('markers stroke'), [
-                paint_order_1.PAINT_ORDER_LAYER.MARKERS,
-                paint_order_1.PAINT_ORDER_LAYER.STROKE,
-                paint_order_1.PAINT_ORDER_LAYER.FILL
+                2 /* MARKERS */,
+                1 /* STROKE */,
+                0 /* FILL */
             ]);
         });
         it('markers stroke fill', function () {
             return assert_1.deepStrictEqual(paintOrderParse('markers stroke fill'), [
-                paint_order_1.PAINT_ORDER_LAYER.MARKERS,
-                paint_order_1.PAINT_ORDER_LAYER.STROKE,
-                paint_order_1.PAINT_ORDER_LAYER.FILL
+                2 /* MARKERS */,
+                1 /* STROKE */,
+                0 /* FILL */
             ]);
         });
         it('stroke fill markers', function () {
             return assert_1.deepStrictEqual(paintOrderParse('stroke fill markers'), [
-                paint_order_1.PAINT_ORDER_LAYER.STROKE,
-                paint_order_1.PAINT_ORDER_LAYER.FILL,
-                paint_order_1.PAINT_ORDER_LAYER.MARKERS
+                1 /* STROKE */,
+                0 /* FILL */,
+                2 /* MARKERS */
             ]);
         });
     });

@@ -1,5 +1,5 @@
 import { IPropertyListDescriptor } from '../IPropertyDescriptor';
-export declare enum PAINT_ORDER_LAYER {
+export declare const enum PAINT_ORDER_LAYER {
     FILL = 0,
     STROKE = 1,
     MARKERS = 2

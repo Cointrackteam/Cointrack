@@ -4,7 +4,7 @@ import Wallet from './wallet/Wallet';
 import logo from '../static/images/logo-main.svg';  
 
 
-export default function Header({loadWeb3Modal, logoutOfWeb3Modal, providerOrSigner, userAddress}) {
+export default function Header({loadWeb3Modal, logoutOfWeb3Modal}) {
     return (
         <Navbar expand='lg' fixed='top' >
             <Container>
@@ -19,8 +19,6 @@ export default function Header({loadWeb3Modal, logoutOfWeb3Modal, providerOrSign
                 <Wallet
                   loadWeb3Modal={loadWeb3Modal}
                   logoutOfWeb3Modal={logoutOfWeb3Modal}
-                  providerOrSigner={providerOrSigner}
-                  userAddress={userAddress}
                 />
               </Nav.Item>
             </Container>

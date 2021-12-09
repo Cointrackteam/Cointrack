@@ -1,5 +1,5 @@
 import { IPropertyIdentValueDescriptor } from '../IPropertyDescriptor';
-export declare enum BORDER_STYLE {
+export declare const enum BORDER_STYLE {
     NONE = 0,
     SOLID = 1,
     DASHED = 2,

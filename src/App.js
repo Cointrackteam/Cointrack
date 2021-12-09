@@ -3,138 +3,134 @@ import React, {useState, useEffect, useCallback} from 'react';
 import Home from './pages/Home';
 import Header from './components/Header'
 import { Routes, Route , BrowserRouter as Router} from 'react-router-dom';
-import 'react-toastify/dist/ReactToastify.css';
-import { AppContextProvider } from './AppContext';
+import AnalysisResults from './components/AnalysisResults';
+import { useAppContext } from './AppContext';
 
-// alerts
-import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import './styles/App.css';
+
+import { newModal } from  './helpers/createModal'; 
+import { ToastContainer, toast} from 'react-toastify';
+import { generateOptions } from './helpers/toasts';
 
 // ethers
 const ethers = require('ethers');
 
-// for wallet
-import Web3Modal from 'web3modal';
-import  { useAddressHook } from './hooks/addressHooks/useAddressHook';
-import { options } from  './providers'; 
-
-// alerts
-import { useAlert, alert} from './hooks/alertsHooks/useAlertHook';
-
-// css
-import './styles/App.css';
-
-const targetNetwork = process.env.RAZZLE_TARGET_NETWORK === 'test' ? 4 : 1;
-
 const App = () => {
-    const web3Modal = new Web3Modal(options);
+  const web3Modal = newModal();
+  const targetNetwork = process.env.RAZZLE_TARGET_NETWORK === 'test' ? 4 : 1;
+  const { setCEXAddressData, cexAddressData, setInjectedProvider, injectedProvider } = useAppContext();
 
-    const [injectedProvider, setInjectedProvider] = useState();
-    const [chainId, setChainId] = useState();
-    const [userAddress, setUserAddress] = useAddressHook(injectedProvider);
-    
-    // alert triggers
-    const triggerNotCorrectNeworkIdAlert = alert(
-      `Wrong network, connect to ${process.env.RAZZLE_TARGET_NETWORK === 'test' ? 'Rinkeby Network' :  'Ethereum Mainnet'}`,
+  // alert triggers
+  const triggerNotCorrectNeworkIdAlert = () => toast (
+    <div>Wrong network, connect to {process.env.RAZZLE_TARGET_NETWORK === 'test' ? 'Rinkeby Network' :  'Ethereum Mainnet'}</div>,
+    generateOptions(
       'bottom-right',
       'warning',
       0
-    );
+    )
+  );
 
-    useEffect(() => {
+  useEffect(()=>{
       if (web3Modal.cachedProvider) {
-        loadWeb3Modal();
+          login();
       }
-    }, [loadWeb3Modal]);
-
-    // sets the provider for web3modal
-    const loadWeb3Modal = useCallback(async () => {
-        let provider;
-        try {
-          provider = await web3Modal.connect()
-        } catch (e){
-          console.log(e);
-        }
-
-        if (provider) {
-          
-          setInjectedProvider(new ethers.providers.Web3Provider(provider));
-          setChainId(Number(window.ethereum.chainId));
-
-          provider.on("connect", () =>{
-            if (Number(chainId) != targetNetwork){
-              triggerNotCorrectNeworkIdAlert()  
-            }
-          });
-
-          provider.on("chainChanged", chainId => {
-            console.log(`chain changed to ${chainId}! updating providers`);
-            setInjectedProvider(new ethers.providers.Web3Provider(provider));
-            if (Number(chainId) != targetNetwork){
-              triggerNotCorrectNeworkIdAlert()  
-            }
-          });
+      if(injectedProvider && Number(injectedProvider.chainId) !== targetNetwork) handleWrongChain(injectedProvider);
       
-          provider.on("accountsChanged", () => {
-            console.log(`account changed!`);
-            setInjectedProvider(new ethers.providers.Web3Provider(provider));
-            setChainId(window.ethereum.chainId);
-            if (Number(chainId) != targetNetwork){
-              triggerNotCorrectNeworkIdAlert()  
-            }
-          });
-      
-          // Subscribe to session disconnection
-          provider.on("disconnect", (code, reason) => {
-            console.log(code, reason)
-            logoutOfWeb3Modal()
-          });
-        }
+  }, [injectedProvider, login])
 
-    }, [setInjectedProvider]);
+  useEffect(() => {
+    // initialize cexData database
+    if(!cexAddressData){
+      setCEXAddressData();
+    }
+  }, []);
 
-    // logs out of web3Modal 
-    const logoutOfWeb3Modal = async () => {
+  // sets the provider for web3modal
+  const login = useCallback(async () => {
+    var injected;
+    try {
+        
+        let provider = await web3Modal.connect();
+        injected = new ethers.providers.Web3Provider(provider).provider;
 
-        await web3Modal.clearCachedProvider();
+        if(injected && Number(injected.chainId) !== 4) await handleWrongChain(injected, logout); // if wrong chain then switch chains
 
-        if (injectedProvider.provider && typeof injectedProvider.provider.disconnect == "function") {
-          await injectedProvider.provider.disconnect();
-        }
-        if (injectedProvider.close){
-          await injectedProvider.close();
-        } 
-        if (injectedProvider.disconnect){
-          await injectedProvider.disconnect();
-        }
+        injected.on('connect', info => {
+            console.log(info);
+        });
 
-        setTimeout(() => {
-          window.location.reload();
-        }, 1);
+        injected.on('accountsChanged', account => {
+            
+            setInjectedProvider(new ethers.providers.Web3Provider(provider).provider);
+        });
+
+        injected.on('chainChanged', async chainId => {
+            console.log(`switched chains ${chainId}`);
+            if(window.ethereum.chainId !== targetNetwork) await handleWrongChain(window.ethereum);
+            setInjectedProvider(new ethers.providers.Web3Provider(provider).provider);
+        });
+
+        injected.on("disconnect", (code, reason) => {
+          console.log(code, reason)
+          logout();
+        });
+
+        setInjectedProvider(injected);        
+
+    } catch (e){ 
+        console.log(e);
     }
 
+  }, [injectedProvider]);
+
+  const logout = async () => {
+    await web3Modal.clearCachedProvider();
+    if (injectedProvider && typeof injectedProvider.disconnect == "function") {
+      await injectedProvider.disconnect();
+    }
+    setInjectedProvider(undefined);
+    setTimeout(() => {
+        window.location.reload();
+    }, 1000);
+  }
+
+  async function handleWrongChain (provider){
+    
+    triggerNotCorrectNeworkIdAlert();
+    try {
+      await provider.request({
+          method: 'wallet_switchEthereumChain',
+          params: [{ chainId: '0x4' }],
+      })
+      console.log("switched chains sucessfully");
+      window.location.reload();
+
+    } catch (e){
+      console.log(e);
+    }
+  } 
+
   return (
-    <AppContextProvider>
       <Router >  
           <Header
-            loadWeb3Modal={loadWeb3Modal}
-            logoutOfWeb3Modal={logoutOfWeb3Modal}
-            providerOrSigner={injectedProvider}
-            userAddress={userAddress}
+            loadWeb3Modal={login}
+            logoutOfWeb3Modal={logout}
           />
-          <ToastContainer />
 
           <Routes>
-            <Route 
-            exact path="/" 
-            element={<Home
-              userAddress={userAddress}
-              targetNetwork={targetNetwork}
-              chainId={chainId}
-            />}/>
+            <Route path="/" element={<Home />}> {/** home page **/}
+              <Route path=":resultsId" element={<AnalysisResults />} /> {/** results component **/}
+            </Route>
+            {/* <Route path="/*" element={<h1 style={{marginTop: '10rem'}}>Oops! page does not exist</h1>} /> */}
           </Routes>
+          <ToastContainer style={{width: "unset", padding: "0.5rem 0.5rem"}}/>
       </Router>
-    </AppContextProvider>
   );
 };
 
 export default App;
+
+
+
+

@@ -1,9 +1,10 @@
 import axios from 'axios';
 const utils = require('ethers').utils; 
-const ethPriceUrl = "https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd"
+const ethPriceUrl = "https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd";
 const servicePrice = process.env.RAZZLE_SERVICE_PRICE;
 const serviceProvider = process.env.RAZZLE_SERVICE_PROVIDER;
-
+// const targetNetwork = process.env.RAZZLE_TARGET_NETWORK === 'test' ? 4 : 1;
+const ethers = require('ethers'); 
 
 async function calculateTosend(){
   const res = await axios.get(ethPriceUrl);
@@ -11,22 +12,16 @@ async function calculateTosend(){
   return Number(servicePrice) / Number(current);  
 }
 
-export async function payForAnalysis(id, signerAddress){
-  
+export async function payForAnalysis(provider){
+  const signer = new ethers.providers.Web3Provider(provider).getSigner();
   const toSend = await calculateTosend();
   let toSendParsed = await utils.parseUnits(String(toSend.toFixed(9)), 'ether');
   
   const tx = {
-    from: signerAddress,
     to: serviceProvider,
-    chainId: id,
     value: toSendParsed._hex
   }
   
-  const txHash = await window.ethereum.request({
-    method: 'eth_sendTransaction',
-    params: [tx]
-  }) 
+  return signer.sendTransaction(tx);
 
-  return txHash
 } 

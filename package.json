@@ -64,6 +64,7 @@
     "stream": "^0.0.2",
     "stream-browserify": "^3.0.0",
     "stream-http": "^3.2.0",
+    "unique-slug": "^2.0.2",
     "walletlink": "^2.2.8",
     "web3.storage": "^3.3.4",
     "web3modal": "^1.9.4"

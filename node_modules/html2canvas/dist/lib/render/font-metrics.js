@@ -18,6 +18,7 @@ var FontMetrics = /** @class */ (function () {
         container.style.fontSize = fontSize;
         container.style.margin = '0';
         container.style.padding = '0';
+        container.style.whiteSpace = 'nowrap';
         body.appendChild(container);
         img.src = util_1.SMALL_IMAGE;
         img.width = 1;

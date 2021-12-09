@@ -1,36 +1,27 @@
-import React, {useState, useEffect } from 'react';
+import React, {useState } from 'react';
 import { useForm}  from "react-hook-form";
+import { useNavigate } from 'react-router-dom';
 import { Button, Form, InputGroup, FormControl, Spinner, Col, Row} from 'react-bootstrap'; 
 import { requestAction } from '../helpers/etherscan';
 import { useAppContext } from '../AppContext';
 
-import { analyzeNormalTransActions } from '../helpers/analyzetx';
-import DownloadPDF from './DownloadPDF';
 import AccountAddressButton from './AccountAddressButton';
 import { payForAnalysis } from '../helpers/transactor';
-import { toast, ToastContainer } from 'react-toastify';
+import { generateOptions } from '../helpers/toasts';
 
-export default function HeroForm({userAddress, targetNetwork, chainId}){
-    const { setAnalysisResults, analysisResults, cexAddressMap } = useAppContext();
+import { toast } from 'react-toastify';
+import { Outlet } from 'react-router-dom';
+const slug = require('unique-slug');
+
+export default function HeroForm(){
+    const { injectedProvider, cexAddressData } = useAppContext();
     const [ paying, setPaying ] = useState(false); 
-    const [ isCorrectNetwork, setIsCorrectNetwork ] = useState(false);
-    const [ analysisReady, setAnalysisReady ] = useState(false);
-
-    useEffect(()=>{
-        if (targetNetwork === chainId){
-            setIsCorrectNetwork(true);
-        }
-    }, [targetNetwork, chainId, setAnalysisReady])
+    const navigate = useNavigate();
 
     const { register, 
-        formState, 
-        setFocus, 
-        getValues, 
         setValue,
-        resetField,
-        reset, 
         handleSubmit,
-        formState: {error, isDirty, isSubmitting, touchedFields, submitCount}
+        formState: { isSubmitting }
     } = useForm({
         mode: 'onSubmit',
         revalidate: 'onChange',
@@ -40,28 +31,52 @@ export default function HeroForm({userAddress, targetNetwork, chainId}){
     }) 
 
     const onSubmit = async (data, e) => { 
-        let txhash;
         try {
             setPaying(true);
-            txhash = await toast.promise(() => payForAnalysis(chainId, userAddress), {pending: 'paying....', success: 'transaction succesffull', error: 'Error'})
-        } catch (e){
-            let message = alert(e,'bottom-right', 'warning', 0);
-            message();
-        }
-        if (txhash){
-            setPaying(false);
-            try {
-                let response = await requestAction('get_account_transactions', data.ethAddress); 
-                while (response.data.result.length < 1){
-                    response = await requestAction('get_account_transactions', data.ethAddress);
+            let transaction = await toast.promise(() => payForAnalysis(injectedProvider), {
+                pending: {
+                    render({data}){
+                        return <div style={{width: "4rem"}}>...Paying</div>;
+                    }
+                }, 
+                success: {
+                    render({data: { hash } }){
+                        return <div>transaction succesffully created with transactionHash {hash}</div>;
+                    }
+                }, 
+                error: {
+                    render({data: {code, message} }){
+                        return <div>Error: {code}, message: {message}</div>;
+                    }
                 }
-                let analysisData = analyzeNormalTransActions(response.data.result, cexAddressMap);
-                setAnalysisResults({clientAddress: data.ethAddress, results: analysisData});
-            } catch (e){
-                console.log(e);
-            }
-        }        
-        return setAnalysisReady(true);                
+            }) // initialize payment flow
+            
+            let { transactionHash } = await toast.promise(() => transaction.wait(), {
+                pending: {
+                    render({data}){
+                        return <div>...waiting for transaction to be mined </div>;
+                    }
+                }, 
+                success: {
+                    render({data: { hash } }){
+                        return <div> successfully payment transaction hash: {hash}</div>;
+                    }
+                }, 
+                error: {
+                    render({data: {code, message} }){
+                        return <div>Error: {code}, message: {message}</div>;
+                    }
+                }
+            }) // wait for transaction to be mined
+            setPaying(false); // paid successfully 
+
+            toast(<div>...Analyzing transactions</div>, generateOptions('bottom-center', 'info', 0));
+            let requestData = await requestAction('get_account_transactions', data.ethAddress); 
+            return navigate(`/${slug()}`, {state: {data: requestData.result, client: data.ethAddress }}); 
+
+        } catch (e){
+            console.log(e);
+        }
     } 
 
     const onError = (errors, e) => {
@@ -104,15 +119,14 @@ export default function HeroForm({userAddress, targetNetwork, chainId}){
                 {
                     <InputGroup className="mb-3" >
                         <FormControl placeholder="Ethereum Address" className="p-2" {...register("ethAddress", {required: "eth address invalid", maxLength: 42})}/>
-                            { !isSubmitting ? !userAddress || chainId != targetNetwork ? submitButtonDisabled : submitButton : spinnerButton}
+                            { !isSubmitting ? !injectedProvider ? submitButtonDisabled : submitButton : spinnerButton}
                     </InputGroup>
                 }
             </Form.Group>
             <Form.Group >
-                <AccountAddressButton callback={setValue} userAddres={userAddress} />
-                {analysisReady ? <DownloadPDF /> : null} 
+                <AccountAddressButton callback={setValue} />
+                <Outlet />
             </Form.Group>
-            <ToastContainer />
         </Form>
     )
 }

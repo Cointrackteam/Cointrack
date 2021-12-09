@@ -4,6 +4,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import $ from 'jquery';
 import App from './App';
+import { AppContextProvider } from './AppContext';
 
 // styles
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -14,7 +15,9 @@ import './styles/swiper.css';
 
 ReactDOM.render(
     <React.StrictMode>
-        <App />
+        <AppContextProvider>
+            <App />
+        </AppContextProvider>
     </React.StrictMode>,
 document.getElementById('root')
 );
